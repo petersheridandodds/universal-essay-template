@@ -44,6 +44,26 @@
 %% fix:
 \usepackage[normalem]{ulem}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% figures
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% for figure adjustment
+%% https://tex.stackexchange.com/questions/91566/syntax-similar-to-centering-for-right-and-left
+\usepackage[export]{adjustbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% tables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{booktabs}
+%% \usepackage[table,x11names,dvipsnames]{xcolor}
+
+
+%% showing latex along with output
+%% https://tex.stackexchange.com/questions/110349/any-way-to-show-latex-example-code-and-execute-it
+%% \usepackage{showexpl}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% color table with fix for revtex4
 %%
@@ -137,6 +157,85 @@
 %% switch off for stupid journals
 \newcommand{\newphrase}{\newline}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% more ways to indicate edits
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\editnote}[1]{
+  \textcolor{orangered}{#1}
+}
+
+%% https://tex.stackexchange.com/questions/194854/how-to-show-latex-commands-in-text-mode
+\newcommand{\latexcommand}[1]{
+  \lstinline[language={[LaTeX]TeX},basicstyle=\ttfamily]{#1}
+}
+
+\newcommand{\editbox}[2]{
+  %% use reply to papers structures
+}
+
+\newcommand{\editboxwithlatex}[2]{
+  %% use reply to papers structures
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% display code
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fancyvrb}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,listings,breakable}
+
+\usepackage{listings}
+
+%% for in-line renderings
+%% https://tex.stackexchange.com/questions/128399/print-small-tex-code-verbatim-and-render-it?noredirect=1&lq=1
+\usepackage{stringstrings}
+\usepackage{readarray}
+
+\newcommand\showcase[1]{{\ttfamily\detokenizeplus{#1}} $\left(#1\right)$\unskip}
+
+\newcommand\showlatex[1]{{\ttfamily\detokenizeplus{#1}}\unskip}
+
+%% same as above but could change
+\newcommand\showcommand[1]{{\ttfamily\detokenizeplus{#1}}\unskip}
+
+\def\firstchar#1#2|{#1}
+% catcode=12 BACKSLASH
+\edef\tbs{\detokenize{\X}}
+\edef\tbs{\expandafter\firstchar\tbs|}
+% catcode=12 LEFT BRACE
+\edef\tlb{\detokenize{{}}}
+\edef\tlb{\expandafter\firstchar\tlb|}
+% catcode=12 UNDERSCORE
+\edef\tus{\detokenize{_}}
+\newcounter{index}
+\newcommand\detokenizeplus[1]{%
+  \def\temparg{\detokenize{#1}}%
+  \getargsC{\temparg}%
+  \setcounter{index}{0}%
+  \def\prevmacro{F}%
+  \whiledo{\value{index} < \narg}{%
+    \stepcounter{index}%
+%   DETERMINE IF A MACRO; REMOVE SPACE BETWEEN CONSECUTIVE MACROS
+    \isnextbyte[q]{\tbs}{\csname arg\roman{index}\endcsname}%
+    \if T\theresult%
+      \if T\prevmacro\unskip\else\fi%
+      \def\prevmacro{T}%
+    \else%
+      \def\prevmacro{F}%
+   \fi%
+%   REMOVE SPACES BEFORE LEFT BRACE
+    \isnextbyte[q]{\tlb}{\csname arg\roman{index}\endcsname}%
+    \if T\theresult\unskip\else\fi%
+%   REMOVE SPACES BEFORE UNDERSCORES
+    \isnextbyte[q]{\tus}{\csname arg\roman{index}\endcsname}%
+    \if T\theresult\unskip\else\fi%
+    \csname arg\roman{index}\endcsname~%
+  }%
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% general stuff
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,15 +256,43 @@
 %%   arrow style=tikz,
 %%  diagrams={>=space}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% general stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{verbatim}
+\usepackage{enumerate}
+
+\usepackage{ifthen}
+
+\usepackage{longtable}
+
+\usepackage{mathtools}
+%% \usepackage{abraces}
+
+%% \usepackage{tikz-cd}
+%% \usetikzlibrary{arrows}
+%% \tikzset{
+%%   commutative diagrams/.cd,
+%%   arrow style=tikz,
+%%  diagrams={>=space}}
+
 \newboolean{twocolswitch}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% arrays; ragged right in arrays
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{array}
 
-% ragged right in arrays
 \newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
 \let\PBS = \PreserveBackslash
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% blackboard font efforts; not good enough
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
 %% would need to go before amssym
 %% 
 %% blackboard font for matrices
@@ -197,9 +324,6 @@
 
 % lettrines
 \usepackage{lettrine}
-
-\newcommand{\tbf}{\textbf}
-\newcommand{\tit}{\textit}
 
 %% differential equations and integrals
 \newcommand{\dee}[1]{\textnormal{d}#1}

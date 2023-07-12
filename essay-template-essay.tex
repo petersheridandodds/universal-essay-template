@@ -1,6 +1,7 @@
 \documentclass[
   12pt,
   notitlepage,
+  longbibliography,
 ]{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,6 +25,11 @@
 
 \pagestyle{plain}
 \setlength{\parindent}{0pt}
+
+%% bibliography
+\usepackage[numbers,square,comma,sort&compress]{natbib}
+
+%% page layout
 
 \usepackage[
   left=2in,
@@ -52,5 +58,20 @@
 \bigskip
 
 \input{\filenamebase.body}
+
+%% \acknowledgments
+%% \input{\filenamebase.acknowledgments}
+
+%% changelog
+%% for updates to the *Xivs
+%% \section*{Changelog}
+%% \input{\filenamebase.changelog}
+
+%% \bibliographystyle{unsrtabbrv}
+%% local
+%% \bibliography{everything.bib}
+%% overleaf
+%% \bibliography{\filenamebase.bib}
+
 
 \end{document}

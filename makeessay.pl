@@ -111,10 +111,14 @@ foreach $body (@bodies) {
 	$log = <TEXLOGFILE>;
 	$log =~ m/Output written on (.*\)[\.]*)$/ms;
 	($line = $1) =~ s/\n//g;
-##    print "$line\n";
+	## pdflatex
 	$line =~ m/\((\d+) (pag.*?), (\d+) bytes\)/;
 	$numpages = $1;
 	$numbytes = $3;
+	## xelatex
+	$line =~ m/\((\d+) (pag.*?)\./;
+	$numpages = $1;
+	$numbytes = `stat -f%z $filename-essay.pdf`;
 
 	close TEXLOGFILE;
 
